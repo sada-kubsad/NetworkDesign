@@ -1,9 +1,9 @@
 # End State Patterns:
 ## Single Vnet (Hub and Spoke) with Azure VPN GW Solution:
 -	Other spokes of the Hub and Spoke solution are dotted lines because we don't know there is a use case yet for needing the spokes.
--	Every single VPN is considered East West traffic and will be filtered through the Palo inside interface. The next hop will be the ILB. Then it will forward to one of Palo Altos,  and then traffic leaves the same interface to another destination that is explicitly allowed. 
-o	The Azure VPN gateway will forward to a LB
--	VPN gateway in the hub is connected to AVS via the ER circuit and ER GW in the hub.
+-	Every single VPN is considered East West traffic and will be filtered through the Palo inside interface. The next hop will be the ILB. Then it will forward to one of Palo Altos,  and then traffic leaves the same interface to another destination that is explicitly allowed.
+ -	The Azure VPN gateway will forward to a LB
+-  VPN gateway in the hub is connected to AVS via the ER circuit and ER GW in the hub.
 -	 With the ER circuit connecting the hub ER GW and AVS, the Hub learns the AVS prefixes
 -	In a hub and spoke design, ER GW learnt routes will leak to the end customers via the ARS acting as a route reflector between ER Gateway and VPN Gateway. 
 -	NATing:
