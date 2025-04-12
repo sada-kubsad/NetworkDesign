@@ -2,7 +2,7 @@
 <details>
 <summary>Options for End State</summary>
 
-- [Single Vnet (Hub and Spoke) with VPN Termination on Azure VPN GW](#)
+- [Single VNet (Hub and Spoke) with VPN Termination on Azure VPN GW](#)
 
   - [Architecture Diagram](#)
 
@@ -10,7 +10,7 @@
 
   - [Cons](#)
 
-- [Transit/Spoke VNET for VPN](#)
+- [Transit/Spoke VNet for VPN](#)
 
   - [Solution Description](#)
 
@@ -30,7 +30,7 @@
 
   - [Cons](#)
 
-- [Single Vnet (Hub and Spoke) with VPN Termnination on Palo VPN GW](#)
+- [Single VNet (Hub and Spoke) with VPN Termnination on Palo VPN GW](#)
 
   - [Solutions Details](#)
 
@@ -85,7 +85,7 @@
 
 # Options for End State:
 
-## Single Vnet (Hub and Spoke) with VPN Termination on Azure VPN GW:
+## Single VNet (Hub and Spoke) with VPN Termination on Azure VPN GW:
 
 ### Architecture Diagram:
 ![image](https://github.com/user-attachments/assets/5827739e-c81b-44f8-94e8-8e02c0d083da)
@@ -99,12 +99,12 @@
 * In a hub and spoke design, ER GW learnt routes will leak to the end customers via the ARS acting as a route reflector between ER Gateway and VPN Gateway.
 * NATing:
   + PAN FW will need to SNAT the end customer's traffic to AVS
-  + Tunnels will terminate on the VPN GW in the Hub Vnet with destination as PAN. When end customers want to communicate with the app hosted on AVS, the PAN will DNAT the traffic and SNAT it.
-* Once AVS is connected to the ER GW in the Hub, T0 in AVS will be responsible for advertising whatever it knows in AVS via the ER GW (in the hub Vnet) to
+  + Tunnels will terminate on the VPN GW in the Hub VNet with destination as PAN. When end customers want to communicate with the app hosted on AVS, the PAN will DNAT the traffic and SNAT it.
+* Once AVS is connected to the ER GW in the Hub, T0 in AVS will be responsible for advertising whatever it knows in AVS via the ER GW (in the hub VNet) to
   + VNets in Azure
   + On-prem locations
   + Learning:
-    - AVS is learning Vnets connected to the Hub
+    - AVS is learning VNets connected to the Hub
     - VNets are learning AVS routes
 * We want everything to go through the Palo for outbound (internet or elsewhere)
 * ARS is needed to reflect/exchange the routes between the ER GW and VPN GW because by default VPN GW is not learning the routes from ER GW (and everything connected to the ER GW like AVS).
@@ -125,14 +125,14 @@
     - Push VPN learnt routes (from the clients/customers) to on-prem, AVS and VNets because AVS acts as a route reflector between VPN GW and ER GW
   + Without ARS, VPN connected clients/customers will only learn the routes of the VNets, not the routes learnt by the ER gateway (ie on-prem and AVS routes)
     - We don't provide transitivity between ER GW and VPN GW connected routes by default
-    - VPN clients won't learn the routes learned through ER GW even though they are injected into the Vnet, but is not advertised.
+    - VPN clients won't learn the routes learned through ER GW even though they are injected into the VNet, but is not advertised.
   + Without ARS, VPN
-    - won't learn the routes learnt by the ER GW (even though they are injected into the Vnet, but its not advertised).
+    - won't learn the routes learnt by the ER GW (even though they are injected into the VNet, but its not advertised).
       * The ER GW is learning the AVS Routes and the on-prem routes
     - will learn only the connected VNets to the ER GW.
   + Without ARS,
-    - the VPN GW will learn the routes of the connected clients (customers) and send it to the Vnet
-    - The ER GW will learn the route of its connected entities (AVS and on-prem) and sent it to the VNET
+    - the VPN GW will learn the routes of the connected clients (customers) and send it to the VNet
+    - The ER GW will learn the route of its connected entities (AVS and on-prem) and sent it to the VNet
     - But they don’t send their learnt routes to each other: the VPN GW does not send its learnt routes to the ER GW. The ER GW does not send its learnt routes to the VPN GW
   + Although the ER GW and the VPN GW are in the same subnet (called GW subnet), they share each other's connected routes with the VNet, but not each other's learnt routes amongst themselves unless there is an ARS with its "enable branch to branch" setting is turned on.
   + ARS does this:
@@ -179,7 +179,7 @@
 
 * Higher cost
 
-## Transit/Spoke VNET for VPN:
+## Transit/Spoke VNet for VPN:
 ### Diagram:
 ![image](https://github.com/user-attachments/assets/fb65e9bb-e673-45a5-8900-febee2965ad7)
 
@@ -189,8 +189,8 @@
   + Route Server
   + Palo
 * You need the ARS in the HubVNet to advertise 0/0 down to AVS and on-prem
-* VPN GW in a separate Vnet provides control over what the VPN GW is learning
-  + The Palos in the Hub VNet will BGP peer with the ARS in the Spoke VPN Vnet and send only those prefixes that you want the clients/customers to know.
+* VPN GW in a separate VNet provides control over what the VPN GW is learning
+  + The Palos in the Hub VNet will BGP peer with the ARS in the Spoke VPN VNet and send only those prefixes that you want the clients/customers to know.
   + The ARS in the Spoke VPN VNet also has a BGP peering with the VPN GW and sends the routes learnt above to the clients/customers.
 * From the perspective of the ER GW in the Hub VNet, you can't have ARS (in the VPN Net) as the next hop, nor can you have the VPN GW as the next hop. We need something to do next hop:
   + We need something to do next hop because:
