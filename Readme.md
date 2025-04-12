@@ -2,7 +2,7 @@
 <details>
 <summary>Options for End State</summary>
 
-- [Single Vnet (Hub and Spoke) with Azure VPN GW Solution](#)
+- [Single Vnet (Hub and Spoke) with VPN Termination on Azure VPN GW](#)
 
   - [Architecture Diagram](#)
 
@@ -30,7 +30,7 @@
 
   - [Cons](#)
 
-- [Single Vnet (Hub and Spoke) with Palo VPN GW Solution](#)
+- [Single Vnet (Hub and Spoke) with VPN Termnination on Palo VPN GW](#)
 
   - [Solutions Details](#)
 
@@ -85,7 +85,7 @@
 
 # Options for End State:
 
-## Single Vnet (Hub and Spoke) with Azure VPN GW Solution:
+## Single Vnet (Hub and Spoke) with VPN Termination on Azure VPN GW:
 
 ### Architecture Diagram:
 ![image](https://github.com/user-attachments/assets/5827739e-c81b-44f8-94e8-8e02c0d083da)
@@ -256,7 +256,7 @@ Because we have Gateways in the Hub and the Spoke VNets, you cannot set "use rem
 * Requires Palo SaaS licensing different from Palo on VM licensing
   + Not all features of Palo on VM are supported in the Palo SaaS license.
 
-## Single Vnet (Hub and Spoke) with Palo VPN GW Solution:
+## Single VNet (Hub and Spoke) with VPN Termination on Palo VPN GW:
 ### Architecture diagram:
 ![image](https://github.com/user-attachments/assets/5722a65a-8746-42e2-865d-37b1fbb01aab)
 
