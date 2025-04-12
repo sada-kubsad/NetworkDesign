@@ -1,80 +1,80 @@
 <Contents>
 
-[End State Patterns: 2](#_Toc195278981)
+[End State Patterns](#)
 
-- [Single Vnet (Hub and Spoke) with Azure VPN GW Solution: 2](#_Toc195278982)
+- [Single Vnet (Hub and Spoke) with Azure VPN GW Solution](#)
 
-  - [Architecture Diagram: 5](#_Toc195278983)
+  - [Architecture Diagram](#)
 
-  - [Pros: 5](#_Toc195278984)
+  - [Pros](#)
 
-  - [Cons: 5](#_Toc195278985)
+  - [Cons](#)
 
-- [Transit/Spoke VNET for VPN: 6](#_Toc195278986)
+- [Transit/Spoke VNET for VPN](#)
 
-  - [Solution Description: 6](#_Toc195278987)
+  - [Solution Description](#)
 
-  - [Diagram: 7](#_Toc195278988)
+  - [Diagram](#)
 
-  - [Pros: 8](#_Toc195278989)
+  - [Pros](#)
 
-  - [Cons: 8](#_Toc195278990)
+  - [Cons](#)
 
-- [vWAN based Solution: 8](#_Toc195278991)
+- [vWAN based Solution](#)
 
-  - [Solution Description: 8](#_Toc195278992)
+  - [Solution Description](#)
 
-  - [Architecture Diagram: 9](#_Toc195278993)
+  - [Architecture Diagram](#)
 
-  - [Pros: 9](#_Toc195278994)
+  - [Pros](#)
 
-  - [Cons: 9](#_Toc195278995)
+  - [Cons](#)
 
-- [Single Vnet (Hub and Spoke) with Palo VPN GW Solution: 9](#_Toc195278996)
+- [Single Vnet (Hub and Spoke) with Palo VPN GW Solution](#)
 
-  - [Solutions Details: 9](#_Toc195278997)
+  - [Solutions Details](#)
 
-  - [Architecture diagram: 11](#_Toc195278998)
+  - [Architecture diagram](#)
 
-  - [Pros: 11](#_Toc195278999)
+  - [Pros](#)
 
-  - [Cons: 11](#_Toc195279000)
+  - [Cons](#)
 
-  - [End-State Pattern Selection Criteria: 11](#_Toc195279001)
+  - [End-State Pattern Selection Criteria](#)
 
-[Phased deployment to End State: 12](#_Toc195279002)
+[Phased deployment to End State](#)
 
-- [Phase 1: Extend Layer 2 12](#_Toc195279003)
+- [Phase 1: Extend Layer](#)
 
-  - [Solution Description: 12](#_Toc195279004)
+  - [Solution Description](#)
 
-  - [Diagram: 12](#_Toc195279005)
+  - [Diagram](#)
 
-  - [CutOver: 12](#_Toc195279006)
+  - [CutOver](#)
 
-- [Phase 2: Move VPN Tunnels, one at a time from on-prem to Azure 12](#_Toc195279007)
+- [Phase 2: Move VPN Tunnels, one at a time from on-prem to Azur](#)
 
-  - [Solution Description: 12](#_Toc195279008)
+  - [Solution Description](#)
 
-  - [Diagram: 13](#_Toc195279009)
+  - [Diagram](#)
 
-  - [Cutover: 13](#_Toc195279010)
+  - [Cutover](#)
 
-- [Phase 3: Move Default GW to AVS: 13](#_Toc195279011)
+- [Phase 3: Move Default GW to AVS](#)
 
-  - [Solution Description: 13](#_Toc195279012)
+  - [Solution Description](#)
 
-  - [Diagram: 13](#_Toc195279013)
+  - [Diagram](#)
 
-  - [Cutover: 13](#_Toc195279014)
+  - [Cutover](#)
 
-- [Phase 4: Move Edge capabilities to Azure: 13](#_Toc195279015)
+- [Phase 4: Move Edge capabilities to Azure](#)
 
-  - [Solution Description: 13](#_Toc195279016)
+  - [Solution Description](#)
 
-  - [Diagram: 13](#_Toc195279017)
+  - [Diagram](#)
 
-  - [Cutover: 14](#_Toc195279018)
+  - [Cutover](#)
 
 </contents>
 
