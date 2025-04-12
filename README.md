@@ -65,7 +65,7 @@
 
   - [Cutover](#)
 
-- [Phase 3: Move Default GW to AVS](#move-default-gw-to-avs)
+- [Phase 3: Move Default GW to AVS](#phase-3-move-default-gw-to-avs)
 
   - [Solution Description](#)
 
@@ -73,7 +73,7 @@
 
   - [Cutover](#)
 
-- [Phase 4: Move Edge capabilities to Azure](#move-edge-capabilities-to-azure)
+- [Phase 4: Move Edge capabilities to Azure](#phase-4-move-edge-capabilities-to-azure)
 
   - [Solution Description](#)
 
