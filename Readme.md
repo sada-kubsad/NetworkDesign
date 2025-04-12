@@ -2,7 +2,7 @@
 <details>
 <summary>Options for End State</summary>
 
-- [Single VNet (Hub and Spoke) with VPN Termination on Azure VPN GW](#)
+- [Single VNet (Hub and Spoke) with VPN Termination on Azure VPN GW](#single-vnet-hub-and-spoke-with-vpn-termination-on-azure-vpn-gw)
 
   - [Architecture Diagram](#)
 
