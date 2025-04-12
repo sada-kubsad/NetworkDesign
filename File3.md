@@ -1,6 +1,6 @@
-<Contents>
-
-[End State Patterns](#)
+# Table of Contents
+<details>
+<summary>End State Patterns</summary>
 
 - [Single Vnet (Hub and Spoke) with Azure VPN GW Solution](#)
 
@@ -41,8 +41,10 @@
   - [Cons](#)
 
   - [End-State Pattern Selection Criteria](#)
+</details>
 
-[Phased deployment to End State](#)
+<details>
+<summary>Phased deployment to End State</summary>
 
 - [Phase 1: Extend Layer](#)
 
@@ -76,7 +78,7 @@
 
   - [Cutover](#)
 
-</contents>
+</details>
 
 # End State Patterns:
 
