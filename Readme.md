@@ -10,7 +10,7 @@
 
   - [Cons](#)
 
-- [Transit/Spoke VNet for VPN](#)
+- [Transit/Spoke VNet for VPN](#transitspoke-vnet-for-vpn)
 
   - [Solution Description](#)
 
