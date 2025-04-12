@@ -1,6 +1,6 @@
 # Table of Contents
 <details>
-<summary>End State Patterns</summary>
+<summary>Options for End State</summary>
 
 - [Single Vnet (Hub and Spoke) with Azure VPN GW Solution](#)
 
@@ -40,7 +40,10 @@
 
   - [Cons](#)
 
-  - [End-State Pattern Selection Criteria](#)
+</details>
+
+<details>
+<summary>Selection Criteria for End-State</summary>
 </details>
 
 <details>
@@ -80,7 +83,7 @@
 
 </details>
 
-# End State Patterns:
+# Options for End State:
 
 ## Single Vnet (Hub and Spoke) with Azure VPN GW Solution:
 
@@ -177,9 +180,10 @@
 * Higher cost
 
 ## Transit/Spoke VNET for VPN:
+### Diagram:
+![image](https://github.com/user-attachments/assets/fb65e9bb-e673-45a5-8900-febee2965ad7)
 
-### Solution Description:
-
+### Solution Design:
 * VPN Connections are terminated in a VPN GW in a separate VNet (not separate subnet).
 * The VNet hosting the VPN GW will have:
   + Route Server
@@ -217,25 +221,20 @@ Because we have Gateways in the Hub and the Spoke VNets, you cannot set "use rem
       * UDR says to go to AVS (ie AVS summary routes), go to the FW in the VPN VNet first.
       * The FW in the VPN VNet is already leaning the routes to get to AVS because the ARS in the VPN VNet is advertising that the next hop is Palo (in the Hub VNet). Hence the traffic goes to the Palo ILB. Then to AVS.
 
-### Diagram:
 
-![A diagram of a network
-
-AI-generated content may be incorrect.](data:image/png;base64...)
 
 ### Pros:
-
 * More control over the routes received by the clients/customers
 
 ### Cons:
-
 * Complex routing setup
 * Requires a duplication of NVA/Palo & ARS in the VPN Subnet
 
 ## vWAN based Solution:
+### Diagram:
+![image](https://github.com/user-attachments/assets/5e28d838-dd11-46c6-9482-6562cca01080)
 
 ### Solution Description:
-
 * Needs Palo inside the VHub
   + Today you cannot have Palo in a spoke
     - If Palo were in a spoke, you can't transit from ER GW to VPN GW via Palo in the spoke in vWAN
@@ -248,25 +247,20 @@ AI-generated content may be incorrect.](data:image/png;base64...)
   + RouteMap option to drop routes on a VPN tunnel does not exist in Hub and Spoke. The RouteMap option is only available in vWAN.
   + With Hub and Spoke the only option to control the on-prem and AVS routes advertised to clients/customers was to setup a Transit VPN GW VNet (as shown above) to control routes being sent by the Palo in the hub VNet (above) to the ARS in the VPN VNet to send to the VPN GW and clients/customers as shown above.
 
-### Architecture Diagram:
 
-![A diagram of a network
-
-AI-generated content may be incorrect.](data:image/png;base64...)
 
 ### Pros:
-
 * Makes the design easier
 
 ### Cons:
-
 * Requires Palo SaaS licensing different from Palo on VM licensing
   + Not all features of Palo on VM are supported in the Palo SaaS license.
 
 ## Single Vnet (Hub and Spoke) with Palo VPN GW Solution:
+### Architecture diagram:
+![image](https://github.com/user-attachments/assets/5722a65a-8746-42e2-865d-37b1fbb01aab)
 
 ### Solutions Details:
-
 * Leverages the Palos to terminating the client/customer VPN tunnels
 * If we want to terminate the VPN on the Palos, we can use their static public IPs and bypass the public Load Balancer for IPSec packets.
   + The customer side would have an active-standby configuration (like on Cisco ASA) where you can put multiple peer IPs.
@@ -284,22 +278,15 @@ AI-generated content may be incorrect.](data:image/png;base64...)
     - Tunnels are not BGP tunnels, tunnels are static tunnels that are policy based.
   + We have to assume that the client at a minimum knows how to setup a tunnel, but not know how to manage it beyond dynamic routing etc.
 
-### Architecture diagram:
 
-![A diagram of a computer network
-
-AI-generated content may be incorrect.](data:image/png;base64...)
 
 ### Pros:
-
 * Removes the complexity introduced by the clients/customers receiving all on-prem and AVS routes
 
 ### Cons:
-
 * Redundancy and resiliency goes down because of no failover as the Palo's cannot do VPN when frontended by a Load Blancer for redundancy and failover. Microsoft LB does not support IPSec packets required for the VPN tunnels to Palos.
 
-# End-State Pattern Selection Criteria:
-
+# Selection Criteria for End-State:
 * Its not favorable for the client to learn all the on-prem route which introduces complexity, but can we compromise and reduce complexity by letting the clients know about the on-prem routes?
 * The return traffic from the clients is going to Palo, so you can drop connections there as option.
   + Client Traffic -> VPN GW in Hub -> ILB -> Palo -> ER GW -> On-prem. So you can drop in the Palos if destined on-prem.
@@ -323,7 +310,6 @@ AI-generated content may be incorrect.](data:image/png;base64...)
 ## Phase 1: Extend Layer 2
 
 ### Solution Description:
-
 * All the VMs move to AVS, while networking remains on-prem
 * AVS will route Internet traffic through on-prem while migrating:
   + AVS -> DMSEE -> MSEE -> On-Prem -> internet
