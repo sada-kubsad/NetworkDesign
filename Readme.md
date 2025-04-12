@@ -30,7 +30,7 @@
 
   - [Cons](#)
 
-- [Single VNet (Hub and Spoke) with VPN Termnination on Palo VPN GW](#)
+- [Single VNet (Hub and Spoke) with VPN Termnination on Palo VPN GW](#single-vnet-hub-and-spoke-with-vpn-termination-on-palo-vpn-gw)
 
   - [Solutions Details](#)
 
@@ -220,8 +220,6 @@ Because we have Gateways in the Hub and the Spoke VNets, you cannot set "use rem
     - Hence you need a UDR on the VPN Gateway subnet: AVS ---> Az FW
       * UDR says to go to AVS (ie AVS summary routes), go to the FW in the VPN VNet first.
       * The FW in the VPN VNet is already leaning the routes to get to AVS because the ARS in the VPN VNet is advertising that the next hop is Palo (in the Hub VNet). Hence the traffic goes to the Palo ILB. Then to AVS.
-
-
 
 ### Pros:
 * More control over the routes received by the clients/customers
