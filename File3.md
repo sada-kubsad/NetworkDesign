@@ -84,6 +84,10 @@
 
 ## Single Vnet (Hub and Spoke) with Azure VPN GW Solution:
 
+### Architecture Diagram:
+![image](https://github.com/user-attachments/assets/5827739e-c81b-44f8-94e8-8e02c0d083da)
+
+### Solution Design:
 * Other spokes of the Hub and Spoke solution are dotted lines because we don't know there is a use case yet for needing the spokes.
 * Every single VPN is considered East West traffic and will be filtered through the Palo inside interface. The next hop will be the ILB. Then it will forward to one of Palo Altos, and then traffic leaves the same interface to another destination that is explicitly allowed.
   + The Azure VPN gateway will forward to a LB
@@ -152,18 +156,9 @@
     - We want the clients to only learn about AVS, not on-prem.
   + There are multiple design options to prevent clients from learning all routes or a simpler design is vWAN. In the next call will go over the multiple design options.
 
-### Architecture Diagram:
-
-###
-
-![A diagram of a diagram
-
-AI-generated content may be incorrect.](data:image/png;base64...)
-
 ### Pros:
 
 ### Cons:
-
 * Complex because clients/customers accessing VPN will know all routes to get to everything on-prem and everything in AVS:
   + With ARS acting as route reflector between ER GW (connecting on-prem and AVS) and VPN GW (connecting clients/customers), the Clients/customers connected to VPN learn all the routing to get to
     - All on-prem
