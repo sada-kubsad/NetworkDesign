@@ -49,7 +49,7 @@
 <details>
 <summary>Phased deployment to End State</summary>
 
-- [Phase 1: Extend Layer](#)
+- [Phase 1: Extend Layer 2](#)
 
   - [Solution Description](#)
 
@@ -57,7 +57,7 @@
 
   - [CutOver](#)
 
-- [Phase 2: Move VPN Tunnels, one at a time from on-prem to Azur](#)
+- [Phase 2: Move VPN Tunnels, one at a time from on-prem to Azure](#)
 
   - [Solution Description](#)
 
