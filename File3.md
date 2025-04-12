@@ -42,9 +42,9 @@
 
   - [End-State Pattern Selection Criteria: 11](#_Toc195279001)
 
-- [Phased deployment to End State: 12](#_Toc195279002)
+[Phased deployment to End State: 12](#_Toc195279002)
 
-  - [Phase 1: Extend Layer 2 12](#_Toc195279003)
+- [Phase 1: Extend Layer 2 12](#_Toc195279003)
 
   - [Solution Description: 12](#_Toc195279004)
 
