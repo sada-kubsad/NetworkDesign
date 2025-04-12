@@ -49,7 +49,7 @@
 <details>
 <summary>Phased deployment to End State</summary>
 
-- [Phase 1: Extend Layer 2](#)
+- [Phase 1: Extend Layer 2](#phase-1-extend-layer-2)
 
   - [Solution Description](#)
 
@@ -57,7 +57,7 @@
 
   - [CutOver](#)
 
-- [Phase 2: Move VPN Tunnels, one at a time from on-prem to Azure](#)
+- [Phase 2: Move VPN Tunnels, one at a time from on-prem to Azure](#phase-2-move-vpn-tunnels-one-at-a-time-from-on-prem-to-azure)
 
   - [Solution Description](#)
 
@@ -65,7 +65,7 @@
 
   - [Cutover](#)
 
-- [Phase 3: Move Default GW to AVS](#)
+- [Phase 3: Move Default GW to AVS](#move-default-gw-to-avs)
 
   - [Solution Description](#)
 
@@ -73,7 +73,7 @@
 
   - [Cutover](#)
 
-- [Phase 4: Move Edge capabilities to Azure](#)
+- [Phase 4: Move Edge capabilities to Azure](#move-edge-capabilities-to-azure)
 
   - [Solution Description](#)
 
