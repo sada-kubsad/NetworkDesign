@@ -302,6 +302,11 @@ Because we have Gateways in the Hub and the Spoke VNets, you cannot set "use rem
     - Will go: ER GW in Azure -> on-prem
 * Overlapping IP considerations:
   + Some apps have overlapping IP addresses. P21 does not have overlapping IP addresses.
+  + Customer A,B and C could all have 192.168.1.0 on their LAN. Depending on the environment, the source subnet is different. Epicor does policy based route to guide traffic based off the source subnet and detination networks.
+  + In some cases, we are source natting for the inside VM. Comming from the customer, across the VPN, as those packets are coming in, we source NAT that to un-used IPs. Then the VMs behind would be able to route to those IPs. 
+    -  P21 is NATing client subnet. P21 doesn't have overlapping client subnets
+    -  You can advertise those NATed IPs from the FW when using a route server using a null route. That creates the BGP advertisement towards ARS. ARS will inject that route into the underlying Azure route tables. The Palos VPN tunnels which are route based injects them into Palo's Route table. 
+    -  
 
 # Phased deployment to End State:
 
