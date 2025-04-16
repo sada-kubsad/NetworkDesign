@@ -91,7 +91,13 @@
   - Why not clients have tunnels up to both primary and secondary Palos and setup Local Preference?
     - Tunnels are not BGP tunnels, tunnels are static tunnels that are policy based.
   - We have to assume that the client at a minimum knows how to setup a tunnel, but not know how to manage it beyond dynamic routing etc.
-
+- How do we get the default route to AVS? Palo -(BGP advertise)-> ARS -> ER GW -> AVS
+  - Palo BGP engine will selective advertise to ARS
+- NATing on Palo
+  - Client -> Palo VPN -(SNAT) -> ER GW -> AVS
+    - VPN coming over 10.0.0.1 from Client 1 and VPN2 is also coming over 10.0.0.1 from Client 2. We need to NAT those IPs on the Palo Alto into a reserved space that we know is always NATed space.
+    - The prefix for all the NATed IPs can be advertised to ARS which will then advertise to AVS.
+    - 
 
 
 ### Pros:
@@ -233,13 +239,7 @@
     - Hence you need a UDR on the VPN Gateway subnet: AVS ---> Az FW
       - UDR says to go to AVS (ie AVS summary routes), go to the FW in the VPN VNet first.
       - The FW in the VPN VNet is already leaning the routes to get to AVS because the ARS in the VPN VNet is advertising that the next hop is Palo (in the Hub VNet). Hence the traffic goes to the Palo ILB. Then to AVS.
-- How do we get the default route to AVS? Palo -(BGP advertise)-> ARS -> ER GW -> AVS
-  - Palo BGP engine will selective advertise to ARS
-- NATing on Palo
-  - Client -> Palo VPN -(SNAT) -> ER GW -> AVS
-    - VPN coming over 10.0.0.1 from Client 1 and VPN2 is also coming over 10.0.0.1 from Client 2. We need to NAT those IPs on the Palo Alto into a reserved space that we know is always NATed space.
-    - The prefix for all the NATed IPs can be advertised to ARS which will then advertise to AVS.
-    - 
+
 
 ### Pros:
 - More control over the routes received by the clients/customers
