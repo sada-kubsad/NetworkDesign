@@ -35,35 +35,23 @@
 <summary>Phased deployment to End State</summary>
 
 - [Phase 1: Extend Layer 2](#phase-1-extend-layer-2)
-
   - [Solution Description](#)
-
   - [Diagram](#)
-
   - [CutOver](#)
 
 - [Phase 2: Move VPN Tunnels, one at a time from on-prem to Azure](#phase-2-move-vpn-tunnels-one-at-a-time-from-on-prem-to-azure)
-
   - [Solution Description](#)
-
   - [Diagram](#)
-
   - [Cutover](#)
 
 - [Phase 3: Move Default GW to AVS](#phase-3-move-default-gw-to-avs)
-
   - [Solution Description](#)
-
   - [Diagram](#)
-
   - [Cutover](#)
 
 - [Phase 4: Move Edge capabilities to Azure](#phase-4-move-edge-capabilities-to-azure)
-
   - [Solution Description](#)
-
   - [Diagram](#)
-
   - [Cutover](#)
 
 </details>
@@ -186,7 +174,7 @@
   - There are multiple design options to prevent clients from learning all routes or a simpler design is vWAN. In the next call will go over the multiple design options.
 
 ### Pros:
-
+- 
 ### Cons:
 - Complex because clients/customers accessing VPN will know all routes to get to everything on-prem and everything in AVS:
   - With ARS acting as route reflector between ER GW (connecting on-prem and AVS) and VPN GW (connecting clients/customers), the Clients/customers connected to VPN learn all the routing to get to
@@ -314,8 +302,7 @@
 
 # Phased deployment to End State:
 
-## Phase 1: Extend Layer 2
-
+## Phase 1: Extend Layer 2 and move servers to AVS
 ### Solution Description:
 - All the VMs move to AVS, while networking remains on-prem
 - AVS will route Internet traffic through on-prem while migrating:
@@ -324,15 +311,12 @@
 - All traffic still flows back through on-prem.
 - On-prem will retain all the network equipment, only VMs are migrating from on-prem to AVS.
   - On-Prem will retain all the network equipment: core switches, next layer switches, routes, FW, Internet WAN circuits etc.
-
 ### Diagram:
 
 ### CutOver:
 
 ## Phase 2: Move VPN Tunnels, one at a time from on-prem to Azure
-
 ### Solution Description:
-
 - Build out the hub in Azure
 - Move the VPN Tunnels, one at a time from on-prem to Azure
 - The VPN Tunnel will be to a different IP to the Palos in the Hub
@@ -343,13 +327,10 @@
 ### Diagram:
 
 ### Cutover:
-
 - After a customer's VPN tunnel cuts over from on-prem to Azure, they should have routes to get to AVS.
 
 ## Phase 3: Move Default GW to AVS:
-
 ### Solution Description:
-
 - Moves some traffic by moving the default GW to AVS, but internet traffic flows through on-prem
 - When you cut over default GW to AVS, you are cutting over everything. This will take a long time because of the VPN tunnels.
   - Cannot change the VPN peer IPs for 1000s of customers
@@ -357,13 +338,11 @@
 ### Diagram:
 
 ### Cutover:
-
 - When you cut over default GW to AVS, you are cutting over everything.
 
 ## Phase 4: Move Edge capabilities to Azure:
 
 ### Solution Description:
-
 - Move VPN Traffic one at a time from
 
 ### Diagram:
