@@ -6,7 +6,7 @@
   - [Pros](#)
   - [Cons](#)
 
-  - [Single VNet with VPN Termnination on Palo VPN GW](#single-vnet-hub-and-spoke-with-vpn-termination-on-palo-vpn-gw)
+- [Single VNet with VPN Termnination on Palo VPN GW](#single-vnet-hub-and-spoke-with-vpn-termination-on-palo-vpn-gw)
   - [Solutions Details](#)
   - [Architecture diagram](#)
   - [Pros](#)
