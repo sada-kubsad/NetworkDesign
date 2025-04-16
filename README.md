@@ -97,7 +97,11 @@
   - Client -> Palo VPN -(SNAT) -> ER GW -> AVS
     - VPN coming over 10.0.0.1 from Client 1 and VPN2 is also coming over 10.0.0.1 from Client 2. We need to NAT those IPs on the Palo Alto into a reserved space that we know is always NATed space.
     - The prefix for all the NATed IPs can be advertised to ARS which will then advertise to AVS.
-    - 
+- Move each VPN:
+  - then just advertise the prefix of those routes from Palo -> ER GW -> AVS
+- Move a server from on-prem to AVS:
+  - then just advertise the new route to the migrated server to everyone's VPN
+-  
 
 
 ### Pros:
