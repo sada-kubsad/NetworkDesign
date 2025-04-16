@@ -101,7 +101,8 @@
       - There is no limit of how many AVS clusters you can have per region.
     - We could do a big bang cut-over with everyone internet going through Azure
       - Different business units with different solutions and platforms will not co-operate to make that happen.
-    - 
+  - We can utilize the same circuits from Austin and use global reach to connect each AVS environment. 
+  - 
 
 
 ### Pros:
@@ -363,4 +364,4 @@
 
 # Next Steps:
 - Limits of number of AVS environments per region
-- 
+- Check on how many circuits can be linked with Global Reach for the multiple AVS environment design. 
