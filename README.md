@@ -2,13 +2,13 @@
 <details>
 <summary>Options for End State</summary>
 
-- [Single VNet with VPN Termnination on Palo VPN GW (selected End State)](#single-vnet-hub-and-spoke-with-vpn-termination-on-palo-vpn-gw)
+- [Single VNet with VPN Termnination on Palo VPN GW (selected)](#single-vnet-with-vpn-termination-on-palo-vpn-gw)
   - [Solutions Details](#)
   - [Architecture diagram](#)
   - [Pros](#)
   - [Cons](#)
 
-- [Single VNet with VPN Termination on Azure VPN GW](#single-vnet-hub-and-spoke-with-vpn-termination-on-azure-vpn-gw)
+- [Single VNet with VPN Termination on Azure VPN GW](#single-vnet-with-vpn-termination-on-azure-vpn-gw)
   - [Architecture Diagram](#)
   - [Pros](#)
   - [Cons](#)
