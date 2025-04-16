@@ -168,8 +168,6 @@
 ### Architecture diagram:
 ![image](https://github.com/user-attachments/assets/64d57f09-50a5-46c7-91ec-370670141a9f)
 
-![image](https://github.com/user-attachments/assets/5722a65a-8746-42e2-865d-37b1fbb01aab)
-
 ### Solutions Details:
 - Leverages the Palos to terminating the client/customer VPN tunnels
 - If we want to terminate the VPN on the Palos, we can use their static public IPs and bypass the public Load Balancer for IPSec packets.
