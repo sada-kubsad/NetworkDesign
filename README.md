@@ -203,7 +203,7 @@
           - VPN GW does not have an IP. It just builds tunnels. You cannot point to the VPN GW. Its not like a NVA.
           - One option is to set "use a remote GW" on the peering between the Hub and the Spoke/VPN peering connection.
             - Because we have Gateways in the Hub and the Spoke VNets, you cannot set "use remote GW" on the peering between the Hub and Spoke.
-- - That something to point the return traffic is the NVA/PAN in the VPN VNet.
+  - That something to point the return traffic is the NVA/PAN in the VPN VNet.
     - Can use Az FW if you don't want to worry about deploying HA pairs and use Az FW more for routing than inspecting.
     - Or can be any flavor of NVA like PAN
   - On the egress interface of the Palo in the Hub VNet, you need a UDR that says:
