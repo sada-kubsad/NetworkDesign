@@ -2,7 +2,7 @@
 <details>
 <summary>Options for End State</summary>
 
-- [Single VNet with VPN Termnination on Palo VPN GW (selected)](#single-vnet-hub-and-spoke-with-vpn-termination-on-palo-vpn-gw)
+- [Single VNet with VPN Termnination on Palo VPN GW (selected End State)](#single-vnet-hub-and-spoke-with-vpn-termination-on-palo-vpn-gw)
   - [Solutions Details](#)
   - [Architecture diagram](#)
   - [Pros](#)
@@ -69,6 +69,37 @@
 </details>
 
 # Options for End State:
+
+## Single VNet with VPN Termination on Palo VPN GW:
+### Architecture diagram:
+![image](https://github.com/user-attachments/assets/64d57f09-50a5-46c7-91ec-370670141a9f)
+
+### Solutions Details:
+- Leverages the Palos to terminating the client/customer VPN tunnels
+- If we want to terminate the VPN on the Palos, we can use their static public IPs and bypass the public Load Balancer for IPSec packets.
+  - The customer side would have an active-standby configuration (like on Cisco ASA) where you can put multiple peer IPs.
+- First deployment of Eagle in Azure leveraged Active-Active Palos peered to ARS. ARS handled all the VPN networks. The customer could determine which Palo they peered to, based off the learnt routes the Palo would advertise to ARS. The VMs would know which Palo has the active tunnel because it would re-advertise that to ARS.
+  - The downside was that it was that tunnel building was co-managed. When customers has to build out tunnels to both Palo 1 and Palo 2, but customers failed to build out tunnels on Palo 2. Hence it did not work out in practice.
+    - This problem can be address if the client configuration to Palo 1 and Palo 2 were built out using automation.
+  - With Cisco ASA, when you can set peer IP1 IP2, makes the client will try IP1, and if it can't it will try IP2.
+  - You have to set the secondary tunnel as passive mode because if both tunnels are down and the VM (onprem or AVS) initiates a reach out connection to the customer (like for printing with Bistrack), the VM connection enters passive mode so the customer has to bring up the tunnel by initiating traffic.
+    - To keep the tunnel up, customers will have to trigger on their side by setting up IP SLA.
+    - Customers may not have the technical ability to bring up the secondary tunnel or do IP SLA.
+    - IN AWS, you can download the VPN config which sets up the config such that you can trigger the IP SLA from the client side.
+    - P21 has 45 customers that need VPN, not using the web version. But even if using web, they could still use VPN for printing.
+    - Customers could build a Cron job on a Linux machine with a loop that pings the other side.
+  - Why not clients have tunnels up to both primary and secondary Palos and setup Local Preference?
+    - Tunnels are not BGP tunnels, tunnels are static tunnels that are policy based.
+  - We have to assume that the client at a minimum knows how to setup a tunnel, but not know how to manage it beyond dynamic routing etc.
+
+
+
+### Pros:
+- Removes the complexity introduced by the clients/customers receiving all on-prem and AVS routes
+
+### Cons:
+- Redundancy and resiliency goes down because of no failover as the Palo's cannot do VPN when frontended by a Load Blancer for redundancy and failover. Microsoft LB does not support IPSec packets required for the VPN tunnels to Palos.
+
 
 ## Single VNet with VPN Termination on Azure VPN GW:
 
@@ -161,38 +192,8 @@
       - Nightmare for VPN->AVS traffic as AVS Prefixes will grow over time and UDR has to be exact AVS prefixes. It cannot be one single big prefix, it has to be the exact prefix, otherwise the VPN traffic to AVS will bypass the FW.
     - VPN Prefixes --Next Hop--> Palo ILB
       - Nightmare for AVS-> VPN traffic as VPN Prefixes will grow over time and UDR has to be exact VPN prefixes. It cannot be one single big prefix, it has to be the exact prefix, otherwise the AVS traffic to VPN will bypass the FW.
-
 - Higher cost
 
-## Single VNet with VPN Termination on Palo VPN GW:
-### Architecture diagram:
-![image](https://github.com/user-attachments/assets/64d57f09-50a5-46c7-91ec-370670141a9f)
-
-### Solutions Details:
-- Leverages the Palos to terminating the client/customer VPN tunnels
-- If we want to terminate the VPN on the Palos, we can use their static public IPs and bypass the public Load Balancer for IPSec packets.
-  - The customer side would have an active-standby configuration (like on Cisco ASA) where you can put multiple peer IPs.
-- First deployment of Eagle in Azure leveraged Active-Active Palos peered to ARS. ARS handled all the VPN networks. The customer could determine which Palo they peered to, based off the learnt routes the Palo would advertise to ARS. The VMs would know which Palo has the active tunnel because it would re-advertise that to ARS.
-  - The downside was that it was that tunnel building was co-managed. When customers has to build out tunnels to both Palo 1 and Palo 2, but customers failed to build out tunnels on Palo 2. Hence it did not work out in practice.
-    - This problem can be address if the client configuration to Palo 1 and Palo 2 were built out using automation.
-  - With Cisco ASA, when you can set peer IP1 IP2, makes the client will try IP1, and if it can't it will try IP2.
-  - You have to set the secondary tunnel as passive mode because if both tunnels are down and the VM (onprem or AVS) initiates a reach out connection to the customer (like for printing with Bistrack), the VM connection enters passive mode so the customer has to bring up the tunnel by initiating traffic.
-    - To keep the tunnel up, customers will have to trigger on their side by setting up IP SLA.
-    - Customers may not have the technical ability to bring up the secondary tunnel or do IP SLA.
-    - IN AWS, you can download the VPN config which sets up the config such that you can trigger the IP SLA from the client side.
-    - P21 has 45 customers that need VPN, not using the web version. But even if using web, they could still use VPN for printing.
-    - Customers could build a Cron job on a Linux machine with a loop that pings the other side.
-  - Why not clients have tunnels up to both primary and secondary Palos and setup Local Preference?
-    - Tunnels are not BGP tunnels, tunnels are static tunnels that are policy based.
-  - We have to assume that the client at a minimum knows how to setup a tunnel, but not know how to manage it beyond dynamic routing etc.
-
-
-
-### Pros:
-- Removes the complexity introduced by the clients/customers receiving all on-prem and AVS routes
-
-### Cons:
-- Redundancy and resiliency goes down because of no failover as the Palo's cannot do VPN when frontended by a Load Blancer for redundancy and failover. Microsoft LB does not support IPSec packets required for the VPN tunnels to Palos.
 
 
 ## Transit/Spoke VNet for VPN:
