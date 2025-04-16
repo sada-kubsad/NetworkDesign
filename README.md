@@ -1,6 +1,7 @@
 # Table of Contents
 <details>
 <summary>Options for End State</summary>
+
 - [Single VNet with VPN Termination on Azure VPN GW](#single-vnet-hub-and-spoke-with-vpn-termination-on-azure-vpn-gw)
   - [Architecture Diagram](#)
   - [Pros](#)
