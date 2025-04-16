@@ -200,13 +200,9 @@
       * In the OS of PAN, you will see the VPN GW as the next hop, but from Azure's perspective, you cannot have:
         + next hop to ARS in the VPN VNet. ARS is just a route reflector.
         + Next hop to VPN GW IP. A UDR cannot point to the VPN GW.
-
-VPN GW does not have an IP. It just builds tunnels. You cannot point to the VPN GW. Its not like a NVA.
-
-One option is to set "use a remote GW" on the peering between the Hub and the Spoke/VPN peering connection.
-
-Because we have Gateways in the Hub and the Spoke VNets, you cannot set "use remote GW" on the peering between the Hub and Spoke.
-
+         - VPN GW does not have an IP. It just builds tunnels. You cannot point to the VPN GW. Its not like a NVA.
+         - One option is to set "use a remote GW" on the peering between the Hub and the Spoke/VPN peering connection.
+           * Because we have Gateways in the Hub and the Spoke VNets, you cannot set "use remote GW" on the peering between the Hub and Spoke.
 * + That something to point the return traffic is the NVA/PAN in the VPN VNet.
     - Can use Az FW if you don't want to worry about deploying HA pairs and use Az FW more for routing than inspecting.
     - Or can be any flavor of NVA like PAN
@@ -244,6 +240,7 @@ Because we have Gateways in the Hub and the Spoke VNets, you cannot set "use rem
   + With route Maps, the connection properties of a specific client's VPN tunnel, can specify to drop the on-prem routes and only leave AVS routes.
   + RouteMap option to drop routes on a VPN tunnel does not exist in Hub and Spoke. The RouteMap option is only available in vWAN.
   + With Hub and Spoke the only option to control the on-prem and AVS routes advertised to clients/customers was to setup a Transit VPN GW VNet (as shown above) to control routes being sent by the Palo in the hub VNet (above) to the ARS in the VPN VNet to send to the VPN GW and clients/customers as shown above.
+  + The ER GW not being able to manage the network segments can be challenging with routing. If we can manage that from the Palo side, leveraging vWAN and vHUB that would still not make sense.
 
 
 
@@ -253,6 +250,7 @@ Because we have Gateways in the Hub and the Spoke VNets, you cannot set "use rem
 ### Cons:
 * Requires Palo SaaS licensing different from Palo on VM licensing
   + Not all features of Palo on VM are supported in the Palo SaaS license.
+  + 
 
 ## Single VNet (Hub and Spoke) with VPN Termination on Palo VPN GW:
 ### Architecture diagram:
@@ -303,10 +301,12 @@ Because we have Gateways in the Hub and the Spoke VNets, you cannot set "use rem
 * Overlapping IP considerations:
   + Some apps have overlapping IP addresses. P21 does not have overlapping IP addresses.
   + Customer A,B and C could all have 192.168.1.0 on their LAN. Depending on the environment, the source subnet is different. Epicor does policy based route to guide traffic based off the source subnet and detination networks.
-  + In some cases, we are source natting for the inside VM. Comming from the customer, across the VPN, as those packets are coming in, we source NAT that to un-used IPs. Then the VMs behind would be able to route to those IPs. 
+  + In some cases, we SNAT for the inside VM. Comming from the customer, across the VPN, as those packets are coming in, we source NAT that to un-used IPs. Then the VMs behind would be able to route to those IPs. 
     -  P21 is NATing client subnet. P21 doesn't have overlapping client subnets
     -  You can advertise those NATed IPs from the FW when using a route server using a null route. That creates the BGP advertisement towards ARS. ARS will inject that route into the underlying Azure route tables. The Palos VPN tunnels which are route based injects them into Palo's Route table. 
-    -  
+    -  Walking through the opposite direction to the point above, Palo is advertising a route for a VPN. That route is leant onto the ARS which injects into an Azure Route Table that the VPN GW subnet is in.
+    -  Return traffic from AVS -> ER GW - (next hop) -> Palo because of those NATed IPs that Palo is sending through ARS will cause the traffic to to by default to Palo. Palo reverse NATs it and sends it back to the client tunnel.
+    -   
 
 # Phased deployment to End State:
 
