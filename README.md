@@ -216,6 +216,13 @@
     - Hence you need a UDR on the VPN Gateway subnet: AVS ---> Az FW
       - UDR says to go to AVS (ie AVS summary routes), go to the FW in the VPN VNet first.
       - The FW in the VPN VNet is already leaning the routes to get to AVS because the ARS in the VPN VNet is advertising that the next hop is Palo (in the Hub VNet). Hence the traffic goes to the Palo ILB. Then to AVS.
+- How do we get the default route to AVS? Palo -(BGP advertise)-> ARS -> ER GW -> AVS
+  - Palo BGP engine will selective advertise to ARS
+- NATing on Palo
+  - Client -> Palo VPN -(SNAT) -> ER GW -> AVS
+    - VPN coming over 10.0.0.1 from Client 1 and VPN2 is also coming over 10.0.0.1 from Client 2. We need to NAT those IPs on the Palo Alto into a reserved space that we know is always NATed space.
+    - The prefix for all the NATed IPs can be advertised to ARS which will then advertise to AVS.
+    - 
 
 ### Pros:
 - More control over the routes received by the clients/customers
@@ -306,7 +313,11 @@
     -  You can advertise those NATed IPs from the FW when using a route server using a null route. That creates the BGP advertisement towards ARS. ARS will inject that route into the underlying Azure route tables. The Palos VPN tunnels which are route based injects them into Palo's Route table. 
     -  Walking through the opposite direction to the point above, Palo is advertising a route for a VPN. That route is leant onto the ARS which injects into an Azure Route Table that the VPN GW subnet is in.
     -  Return traffic from AVS -> ER GW - (next hop) -> Palo because of those NATed IPs that Palo is sending through ARS will cause the traffic to to by default to Palo. Palo reverse NATs it and sends it back to the client tunnel.
-    -   
+
+# Limits:
+- ARS can accept 1000 max prefixes from each peer. There are 10K tunnels right now.
+  - May require route summary. Should not be a problem since using private IP space.
+  - 
 
 # Phased deployment to End State:
 
