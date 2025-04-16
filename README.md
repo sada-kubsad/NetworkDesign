@@ -89,7 +89,19 @@
   - then just advertise the prefix of those routes from Palo -> ER GW -> AVS
 - Move a server from on-prem to AVS:
   - then just advertise the new route to the migrated server to everyone's VPN
--  
+- Internet Traffic:
+  - Controlled via default route
+  - Can be moved anytime that the VM are ready to change their outbound internet address
+  - For a VM that is in AVS that using the default route to go back on-prem to get to the Internet
+  - If we change the default route on the NSXT router will that affect every subnet. So we cannot migrate a subnet from on-prem to AVS at a time.
+    - All traffic for everything in the AVS environment would have to cut over at the same time for outbound internet access
+    - We can have separate NSXTs per subnet, but that would require separate AVS environments
+      - In a single AVS/NSXT environment, you can have a single T0 but multiple T1s because you will be BGP peering with T0. 
+      - Hence we could go with multiple AVS instances, one for P21, one for BisTrac etc. 
+      - There is no limit of how many AVS clusters you can have per region.
+    - We could do a big bang cut-over with everyone internet going through Azure
+      - Different business units with different solutions and platforms will not co-operate to make that happen.
+    - 
 
 
 ### Pros:
@@ -348,3 +360,7 @@
 ### Diagram:
 
 ### Cutover:
+
+# Next Steps:
+- Limits of number of AVS environments per region
+- 
