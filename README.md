@@ -184,25 +184,25 @@
 ![image](https://github.com/user-attachments/assets/fb65e9bb-e673-45a5-8900-febee2965ad7)
 
 ### Solution Design:
-* VPN Connections are terminated in a VPN GW in a separate VNet (not separate subnet).
-* The VNet hosting the VPN GW will have:
-  + Route Server
-  + Palo
-* You need the ARS in the HubVNet to advertise 0/0 down to AVS and on-prem
-* VPN GW in a separate VNet provides control over what the VPN GW is learning
-  + The Palos in the Hub VNet will BGP peer with the ARS in the Spoke VPN VNet and send only those prefixes that you want the clients/customers to know.
-  + The ARS in the Spoke VPN VNet also has a BGP peering with the VPN GW and sends the routes learnt above to the clients/customers.
-* From the perspective of the ER GW in the Hub VNet, you can't have ARS (in the VPN Net) as the next hop, nor can you have the VPN GW as the next hop. We need something to do next hop:
-  + We need something to do next hop because:
+- VPN Connections are terminated in a VPN GW in a separate VNet (not separate subnet).
+- The VNet hosting the VPN GW will have:
+  - Route Server
+  - Palo
+- You need the ARS in the HubVNet to advertise 0/0 down to AVS and on-prem
+- VPN GW in a separate VNet provides control over what the VPN GW is learning
+  - The Palos in the Hub VNet will BGP peer with the ARS in the Spoke VPN VNet and send only those prefixes that you want the clients/customers to know.
+  - The ARS in the Spoke VPN VNet also has a BGP peering with the VPN GW and sends the routes learnt above to the clients/customers.
+- From the perspective of the ER GW in the Hub VNet, you can't have ARS (in the VPN Net) as the next hop, nor can you have the VPN GW as the next hop. We need something to do next hop:
+  - We need something to do next hop because:
     - AVS will know about VPN because the Palo (in the Hub VNet) through its BGP peering with the ARS (in the Hub VNet) is sending 0/0 + VPN routes (can be summary or 1by 1)
     - AVS -> VPN client traffic flow: AVS -> ER GW -> ILB -> a Palo in the Hub VNet. The Palo in the Hub VNet needs a next hop.
-      * The Palo in the Hub VNet has learnt the VPN routes through its BGP peering with the ARS in the VPN Subnet.
-      * In the OS of PAN, you will see the VPN GW as the next hop, but from Azure's perspective, you cannot have:
-        + next hop to ARS in the VPN VNet. ARS is just a route reflector.
-        + Next hop to VPN GW IP. A UDR cannot point to the VPN GW.
-         - VPN GW does not have an IP. It just builds tunnels. You cannot point to the VPN GW. Its not like a NVA.
-         - One option is to set "use a remote GW" on the peering between the Hub and the Spoke/VPN peering connection.
-           * Because we have Gateways in the Hub and the Spoke VNets, you cannot set "use remote GW" on the peering between the Hub and Spoke.
+      - The Palo in the Hub VNet has learnt the VPN routes through its BGP peering with the ARS in the VPN Subnet.
+      - In the OS of PAN, you will see the VPN GW as the next hop, but from Azure's perspective, you cannot have:
+        - next hop to ARS in the VPN VNet. ARS is just a route reflector.
+        - Next hop to VPN GW IP. A UDR cannot point to the VPN GW.
+          - VPN GW does not have an IP. It just builds tunnels. You cannot point to the VPN GW. Its not like a NVA.
+          - One option is to set "use a remote GW" on the peering between the Hub and the Spoke/VPN peering connection.
+            - Because we have Gateways in the Hub and the Spoke VNets, you cannot set "use remote GW" on the peering between the Hub and Spoke.
 * + That something to point the return traffic is the NVA/PAN in the VPN VNet.
     - Can use Az FW if you don't want to worry about deploying HA pairs and use Az FW more for routing than inspecting.
     - Or can be any flavor of NVA like PAN
