@@ -1,43 +1,27 @@
 # Table of Contents
 <details>
 <summary>Options for End State</summary>
-
-- [Single VNet (Hub and Spoke) with VPN Termination on Azure VPN GW](#single-vnet-hub-and-spoke-with-vpn-termination-on-azure-vpn-gw)
-
+- [Single VNet with VPN Termination on Azure VPN GW](#single-vnet-hub-and-spoke-with-vpn-termination-on-azure-vpn-gw)
   - [Architecture Diagram](#)
-
   - [Pros](#)
+  - [Cons](#)
 
+  - [Single VNet with VPN Termnination on Palo VPN GW](#single-vnet-hub-and-spoke-with-vpn-termination-on-palo-vpn-gw)
+  - [Solutions Details](#)
+  - [Architecture diagram](#)
+  - [Pros](#)
   - [Cons](#)
 
 - [Transit/Spoke VNet for VPN](#transitspoke-vnet-for-vpn)
-
   - [Solution Description](#)
-
   - [Diagram](#)
-
   - [Pros](#)
-
   - [Cons](#)
 
 - [vWAN based Solution](#vwan-based-solution)
-
   - [Solution Description](#)
-
   - [Architecture Diagram](#)
-
   - [Pros](#)
-
-  - [Cons](#)
-
-- [Single VNet (Hub and Spoke) with VPN Termnination on Palo VPN GW](#single-vnet-hub-and-spoke-with-vpn-termination-on-palo-vpn-gw)
-
-  - [Solutions Details](#)
-
-  - [Architecture diagram](#)
-
-  - [Pros](#)
-
   - [Cons](#)
 
 </details>
@@ -85,7 +69,7 @@
 
 # Options for End State:
 
-## Single VNet (Hub and Spoke) with VPN Termination on Azure VPN GW:
+## Single VNet with VPN Termination on Azure VPN GW:
 
 ### Architecture Diagram:
 ![image](https://github.com/user-attachments/assets/5827739e-c81b-44f8-94e8-8e02c0d083da)
@@ -179,7 +163,7 @@
 
 - Higher cost
 
-## Single VNet (Hub and Spoke) with VPN Termination on Palo VPN GW:
+## Single VNet with VPN Termination on Palo VPN GW:
 ### Architecture diagram:
 ![image](https://github.com/user-attachments/assets/64d57f09-50a5-46c7-91ec-370670141a9f)
 
