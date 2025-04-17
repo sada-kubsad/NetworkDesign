@@ -102,7 +102,12 @@
     - We could do a big bang cut-over with everyone internet going through Azure
       - Different business units with different solutions and platforms will not co-operate to make that happen.
   - We can utilize the same circuits from Austin and use global reach to connect each AVS environment. 
-  - 
+  - Some apps will remain on-prem while others are in AVS. Hence some apps need Internet egress through Azure while others will Internet egress through on-prem.
+    - Considered multiple AVS clusters, one AVS cluster for Internet egress through Azure another AVS cluster for Internet egress through  as shown below
+      ![image](https://github.com/user-attachments/assets/611cf3e1-cf87-42dc-8acd-27cdfd0c52db)
+      - Concerns with multiple AVS clusters:
+        - Cannot use the same circuit from onprem with global reach to both AVS circuits 
+
 
 
 ### Pros:
