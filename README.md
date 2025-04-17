@@ -103,10 +103,14 @@
       - Different business units with different solutions and platforms will not co-operate to make that happen.
   - We can utilize the same circuits from Austin and use global reach to connect each AVS environment. 
   - Some apps will remain on-prem while others are in AVS. Hence some apps need Internet egress through Azure while others will Internet egress through on-prem.
-    - Considered multiple AVS clusters, one AVS cluster for Internet egress through Azure another AVS cluster for Internet egress through  as shown below
-      ![image](https://github.com/user-attachments/assets/611cf3e1-cf87-42dc-8acd-27cdfd0c52db)
-      - Concerns with multiple AVS clusters:
-        - Cannot use the same circuit from onprem with global reach to both AVS circuits 
+- Cutover: 
+  - Layer 3 interface for the gateway can be moved with a button in HCX that flips the gateway to AVS.
+  - Problem: That is a big bang change that moves all the routing over to AVS. Can't cut over everything at once. Will not have Internet egress when everything cuts over big bang style. Even if we migrated Layer 3 subnet by subnet, the internet egress will cut over big bang over the layer 2 stretch. When these VMs cut over to AVS, they need internet access and they need VPN access.
+    - How can we migrate one VPN at a time if we move all routing all at once. If you cut over the Internet for everyone in one shot, you are also cutting over the VPN for everyone in one shot. 
+    - Customer has site to site VPN with Austin today, we need to move that traffic to Palo Alto first. But for the VM inside of AVS to be be able to route to the Palo Alto or any IP in that encryption domain, every VM would need static routes pointing to the NSXT as its router. The VMs are not going to use the NXST until the big bang cutover unless using BGP to every single VM.
+      - The only thing routing can do is to allow the NSXT to learn the routes. But the VM in AVS is not goign to usee the NSXT for routing.
+  - Mobility Optimized Networking (MON) feature in HCX taht can spoof the default gateway from on-prem and put it in NSXT. 
+    
 
 
 
