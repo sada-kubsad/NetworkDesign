@@ -325,6 +325,7 @@
 - On-prem will retain all the network equipment, only VMs are migrating from on-prem to AVS.
   - On-Prem will retain all the network equipment: core switches, next layer switches, routes, FW, Internet WAN circuits etc.
 ### Diagram:
+![image](https://github.com/user-attachments/assets/bd25112c-f64b-4d66-981f-f2c0c4defa1b)
 
 ### CutOver:
 
@@ -338,6 +339,7 @@
 - After a customer's VPN tunnel cuts over from on-prem to Azure, they should have routes to get to AVS. And AVS should have a single route to get back to the customer's VPN tunnel.
 
 ### Diagram:
+![image](https://github.com/user-attachments/assets/e9047f19-f370-45b5-8fe0-944658134e02)
 
 ### Cutover:
 - After a customer's VPN tunnel cuts over from on-prem to Azure, they should have routes to get to AVS.
