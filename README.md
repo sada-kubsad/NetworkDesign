@@ -37,22 +37,26 @@
 - [Phase 1: Extend Layer 2](#phase-1-extend-layer-2)
   - [Solution Description](#)
   - [Diagram](#)
-  - [CutOver](#)
+  - [Steps](#)
+  - [Success Criteria](#)
 
 - [Phase 2: Layer 3 Cutover (Internet and VPN Tunnels), one at a time from on-prem to Azure](#phase-2-layer-3-cutover-internet-and-vpn-tunnels-one-at-a-time-from-on-prem-to-azure)
   - [Solution Description](#)
   - [Diagram](#)
-  - [Cutover](#)
+  - [Steps](#)
+  - [Success Criteria](#)
 
 - [Phase 3: Move Default GW to AVS](#phase-3-move-default-gw-to-avs)
   - [Solution Description](#)
   - [Diagram](#)
-  - [Cutover](#)
+  - [Steps](#)
+  - [Success Criteria](#)
 
 - [Phase 4: Move Edge capabilities to Azure](#phase-4-move-edge-capabilities-to-azure)
   - [Solution Description](#)
   - [Diagram](#)
-  - [Cutover](#)
+  - [Steps](#)
+  - [Success Criteria](#)
 
 </details>
 
@@ -375,7 +379,6 @@
 - On-Prem will retain all the network equipment: core switches, next layer switches, routes, FW, Internet WAN circuits etc.
 ### Diagram:
 ![image](https://github.com/user-attachments/assets/bd25112c-f64b-4d66-981f-f2c0c4defa1b)
-
 ### Steps:
 1. Setup VPN from Austin/on-prem to Hub VNet in Azure
 2. Setup ER GW in Azure Hub
@@ -385,8 +388,7 @@
 6. Setup HCX
 7. Setup a test application: NGINX over port 80
 8. Move/VMotion a test VM from Austin to AVS
-
-### Exit Criteria:
+### Success Criteria:
 - VM is moved fron on-prem to AVS.
 - Application connectivity continues to work over Layer 2 extention after VM is migrated to AVS
 - Evaluate how Layer 2 stretch works
@@ -416,17 +418,14 @@
     
     - - Can't have the same encryption domain in 2 separate VPNs.
   - Internet connectivity
-
 ### Diagram:
 ![image](https://github.com/user-attachments/assets/e9047f19-f370-45b5-8fe0-944658134e02)
-
 ### Steps:
 1. Setup Palos and ILB in Azure
 2. Setup a simulated client VPN to on-prem
 3. Declare a maintenance window
 - After a customer's VPN tunnel cuts over from on-prem to Azure, they should have routes to get to AVS.
-
-### Exit Criteria:
+### Success Criteria:
 - Validate VPN cut over successfully from on-prem to Azure/Palos
 - Verify application connectivity to port 80 on the VM in AVS  
 - After a customer's VPN tunnel cuts over from on-prem to Azure, they should have routes to get to AVS. And AVS should have a single route to get back to the customer's VPN tunnel.
@@ -437,20 +436,23 @@
 - Moves some traffic by moving the default GW to AVS, but internet traffic flows through on-prem
 - When you cut over default GW to AVS, you are cutting over everything. This will take a long time because of the VPN tunnels.
   - Cannot change the VPN peer IPs for 1000s of customers
-
 ### Diagram:
-
-### Cutover:
+- 
+### Steps:
 - When you cut over default GW to AVS, you are cutting over everything.
 
-## Phase 4: Move Edge capabilities to Azure:
+### Success Criteria:
+-
 
+## Phase 4: Move Edge capabilities to Azure:
 ### Solution Description:
 - Move VPN Traffic one at a time from
-
 ### Diagram:
-
-### Cutover:
+-
+### Steps:
+- 
+### Success Criteria:
+- 
 
 # Next Steps:
 - Limits of number of AVS environments per region
