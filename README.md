@@ -120,10 +120,14 @@
        - Using MON will require some policy routes to be created
        - With MON, if you move 10 VMs on a subnet over to AVS, they are still on the same Layer 2 subnet/VLAN, they are still using the on-prem GW.
          - Schedule a maintenance for Customer A to move their VPN to PAN. At the same time enable MON just for those 10 VMs. Those 10 VMs are now routing with the NSXT, so they would route all traffic (including VPN  and Internet traffic) would go through the VNet if we are letting 0/0 over ER.
-  - *Layer 2 cutover is a zero change from a routing perspective.*
+       - MON eliminates teh diea about needing multiple AV instance because you no longer need to do a big bang routing on the NSXTs per AVs instance. 
+- Cutover Summary:
+  - Layer 2 cutover is a zero change from a routing perspective.
     - The VM moves over to AVS while routing stays the same. 
-  - *Cutover of Layer 3 happens with MON on a per VM basis.*
-  -    
+  - Cutover of Layer 3 happens with MON on a per VM basis.
+    - Also cuts over the VPN and Internet routing from on-prem GW to VNet in Azure
+    - Enable MON for the VM being cut over.
+    - 
     
 
 
