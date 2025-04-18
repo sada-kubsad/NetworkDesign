@@ -127,9 +127,6 @@
   - Cutover of Layer 3 happens with MON on a per VM basis.
     - Also cuts over the VPN and Internet routing from on-prem GW to VNet in Azure
     - Enable MON for the VM being cut over.
-    - 
-    
-
 
 
 ### Pros:
@@ -342,19 +339,46 @@
 
 # Phased deployment to End State:
 
+## Goal:
+- Prove that the connectivity works
+- 
 ## Phase 1: Extend Layer 2 and move servers to AVS
 ### Solution Description:
-- All the VMs move to AVS, while networking remains on-prem
-- AVS will route Internet traffic through on-prem while migrating:
-  - AVS -> DMSEE -> MSEE -> On-Prem -> internet
-- The VNet in Azure will not exist initially, AVS will be just someone else's datacenter.
-- All traffic still flows back through on-prem.
-- On-prem will retain all the network equipment, only VMs are migrating from on-prem to AVS.
-  - On-Prem will retain all the network equipment: core switches, next layer switches, routes, FW, Internet WAN circuits etc.
+- Use a development AVS environment in Austin
+- Setup VPN from on-prem to Azure (similating ER)
+  - Required because connection to AVS is only via ER, AVS cannot VPN connect to on-prem
+    - AVS can do policy based VPN connection to on-prem. That policy based VPN can only terminate in AVS on T1 routers, not T0 routers. 
+  - VPN for Testing only. Not ER because ER ports have a minimum 12 months commitment.
+    - Latency may not be as good as ER, but is for testing. 
+  - Leverage VPN gateway in Azure Hub VNet
+  - Azure VPN gateway has to be in Active/Active mode for AVS.
+  - This circuit is separate and dedicated for this project. 
+- Setup ER GW in VNet
+  - Required to connect to AVS environment
+- Setup ARS in VNet:
+  - Acts as route reflector between VPN GW and ER GW 
+- HCX considerations:  
+  - HCX is supported over ER, VPN and SD WAN
+  - HCX version 10 can turn off HCX encryption when we create HCX tunnels over another VPN IPSec tunnel that is already encrypted. 
+- Test VMs move from Austin to AVS, while networking remains on-prem via on-prem GW
+- Routing
+  - All traffic still flows back through on-prem
+  - Internet Traffic
+    - Internet egress continue to remain on-prem
+    - AVS environment can go out to the internet using Microsoft's direct SNAT  
+    - AVS will route Internet traffic through on-prem: AVS -> DMSEE -> ER GW -> On-Prem -> internet
+  - VPN Traffic 
+- On-Prem will retain all the network equipment: core switches, next layer switches, routes, FW, Internet WAN circuits etc.
 ### Diagram:
 ![image](https://github.com/user-attachments/assets/bd25112c-f64b-4d66-981f-f2c0c4defa1b)
 
-### CutOver:
+### Steps:
+- 1. Setup VPN from Austin/on-prem to Hub VNet in Azure
+  2. Setup ER GW in Azure Hub
+  3. Setup AVS environment
+  4. Link AVS to ER GW created in Azure from step 2
+  5. Setup ARS in Azure
+  6. Move a test VM from Austin to AVS
 
 ## Phase 2: Move VPN Tunnels, one at a time from on-prem to Azure
 ### Solution Description:
