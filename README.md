@@ -109,8 +109,17 @@
     - How can we migrate one VPN at a time if we move all routing all at once. If you cut over the Internet for everyone in one shot, you are also cutting over the VPN for everyone in one shot. 
     - Customer has site to site VPN with Austin today, we need to move that traffic to Palo Alto first. But for the VM inside of AVS to be be able to route to the Palo Alto or any IP in that encryption domain, every VM would need static routes pointing to the NSXT as its router. The VMs are not going to use the NXST until the big bang cutover unless using BGP to every single VM.
       - The only thing routing can do is to allow the NSXT to learn the routes. But the VM in AVS is not goign to usee the NSXT for routing.
-  - Mobility Optimized Networking (MON) feature in HCX that can spoof the default gateway from on-prem and put it in NSXT.
-  -  
+  - Mobility Optimized Networking (MON) feature in HCX can spoof the default gateway from on-prem and put it in NSXT. So VMs that get migrated into AVS, even though on extended VLAN, we can essentially say the GW is local. So now the traffic does not have to hairpin all the way back to on-Prem. 
+    -  Without MON:
+       -  There is a default GW on-oprem. When we extend the VLAN, we are taking the default GW to AVS, but not connecting it to the Tier 1 router.
+    -  With MON:
+       -  MON puts the default GW on the Tier 1. So now if a VM needs to talk to something, it doesn't have to hairpin back on-prem, it just goes straight out of NSX - it goes from Tier 1 to Tier 0 across ER.
+       - MON can route per VM or per subnet. Per VM is the key. 
+       - In the old school way, you can BGP peer with the VM itself.
+       - MON is optimized for Layer 3 traffic
+       - Using MON will require some policy routes to be created
+       - With MON, if you move 10 VMs on a subnet over to AVS, they are still on the same Layer 2 subnet/VLAN, they are still using the on-prem GW.
+         - Schedule a maintenance for Customer A to move their VPN to PAN. At the same time enable MON just for those 10 VMs. Those 10 VMs are now routing with NSXT - all routing including VPN traffic and also Internet routed would go through the VNet. 
     
 
 
