@@ -110,16 +110,18 @@
     - Customer has site to site VPN with Austin today, we need to move that traffic to Palo Alto first. But for the VM inside of AVS to be be able to route to the Palo Alto or any IP in that encryption domain, every VM would need static routes pointing to the NSXT as its router. The VMs are not going to use the NXST until the big bang cutover unless using BGP to every single VM.
       - The only thing routing can do is to allow the NSXT to learn the routes. But the VM in AVS is not goign to usee the NSXT for routing.
   - Mobility Optimized Networking (MON) feature in HCX can spoof the default gateway from on-prem and put it in NSXT. So VMs that get migrated into AVS, even though on extended VLAN, we can essentially say the GW is local. So now the traffic does not have to hairpin all the way back to on-Prem. 
+    - As of setting up Layer 2 stretch (previous step), you then have a default GW in both on-prem and on T1 router in Azure.
     -  Without MON:
-       -  There is a default GW on-oprem. When we extend the VLAN, we are taking the default GW to AVS, but not connecting it to the Tier 1 router.
-       -  When you stretch the VLAN, on-prem GW is going to be sitting on the Tier 1 router in an admin down state. On-prem is advertising the entire subnet.  
+       -  The default GW is on-oprem. When we extend the VLAN, we are taking the default GW to AVS, but not connecting it to the Tier 1 router. Traffic still hairpins back on-prem. 
+       -  When you stretch the VLAN, on-prem GW is going to be sitting on the Tier 1 router in an admin down state. On-prem is advertising the entire subnet to Tier 1 router in AVS which is in admin down state.  
     -  With MON:
-       -  MON puts the default GW on the Tier 1. So now if a VM needs to talk to something, it doesn't have to hairpin back on-prem, it just goes straight out of NSX - it goes from Tier 1 to Tier 0 across ER.
-       - On-prem is normally advertise the entire subnet. But when MON is turned on, NSXT in going to advertise a /32 per VM to the on-prem.  
+       -  When you enable MON it brings up (sets admin state up) the GW on the Tier 1 router in AVS. NSXT in going to advertise a /32 per VM with next hop to its specified destination via ER. So now if a VM needs to talk to something, it doesn't have to hairpin back on-prem, it just goes straight out of NSX - it goes from Tier 1 to Tier 0 across ER to its intended destination.
        - MON can influence routing per VM or per subnet. Per VM is the key. 
        - In the old school way, you can BGP peer with the VM itself.
-       - MON is optimized for Layer 3 traffic
-       - Using MON will require some policy routes to be created
+       - MON is to be used for influencing Layer 3 traffic
+       - Using MON will require some policy routes created to define where to send the traffic
+         - When MON is off, the default policy routes (for RFC 1918 addresses) sends the traffic back to the default GW on-prem
+         - When MON is on, a policy per VM IP specifies where to send the traffic: to on-prem GW or to T1 GW in AVS  
        - With MON, if you move 10 VMs on a subnet over to AVS, they are still on the same Layer 2 subnet/VLAN, they are still using the on-prem GW.
          - Schedule a maintenance for Customer A to move their VPN to PAN. At the same time enable MON just for those 10 VMs. Those 10 VMs are now routing with the NSXT, so they would route all traffic (including VPN  and Internet traffic) would go through the VNet if we are letting 0/0 over ER.
        - MON eliminates the need for multiple AV instance because you no longer need to do a big bang routing on the NSXTs per AVs instance. 
