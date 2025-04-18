@@ -28,11 +28,11 @@
 </details>
 
 <details>
-<summary>Selection Criteria for End-State</summary>
+<summary>POC</summary>
 </details>
 
 <details>
-<summary>Phased deployment to End State</summary>
+<summary>POC</summary>
 
 - [Phase 1: Extend Layer 2](#phase-1-extend-layer-2)
   - [Solution Description](#)
@@ -337,10 +337,10 @@
   - May require route summary. Should not be a problem since using private IP space.
   - 
 
-# Phased deployment to End State:
+# POC:
 
 ## Goal:
-- Prove that the connectivity works
+- Prove that the connectivity solution works
 - 
 ## Phase 1: Extend Layer 2, setup HCX and move servers to AVS
 ### Solution Description:
@@ -383,7 +383,9 @@
 
 ## Phase 2: Layer 3 Cutover (Internet and VPN Tunnels), one at a time from on-prem to Azure
 ### Solution Description:
-- Build out the hub in Azure
+- Add Palos and ILB to the hub in Azure
+  - An NVA (like Palo) is required to inject routes (default route) into Azure.
+  - NVA --(routing info)--> ARS --> AVS, on-prem  
 - Move the VPN Tunnels, one at a time from on-prem to Azure
 - The VPN Tunnel will be to a different IP to the Palos in the Hub
 - The VMs in AVS, need to be able to talk to the VPN Tunnels and client instead of using the Global Reach to on-prem out to on-prem VPN.
@@ -393,7 +395,8 @@
 ### Diagram:
 ![image](https://github.com/user-attachments/assets/e9047f19-f370-45b5-8fe0-944658134e02)
 
-### Cutover:
+### Steps:
+1
 - After a customer's VPN tunnel cuts over from on-prem to Azure, they should have routes to get to AVS.
 
 ## Phase 3: Move Default GW to AVS:
