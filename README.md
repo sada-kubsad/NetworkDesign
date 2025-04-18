@@ -114,12 +114,16 @@
        -  There is a default GW on-oprem. When we extend the VLAN, we are taking the default GW to AVS, but not connecting it to the Tier 1 router.
     -  With MON:
        -  MON puts the default GW on the Tier 1. So now if a VM needs to talk to something, it doesn't have to hairpin back on-prem, it just goes straight out of NSX - it goes from Tier 1 to Tier 0 across ER.
-       - MON can route per VM or per subnet. Per VM is the key. 
+       - MON can influence routing per VM or per subnet. Per VM is the key. 
        - In the old school way, you can BGP peer with the VM itself.
        - MON is optimized for Layer 3 traffic
        - Using MON will require some policy routes to be created
        - With MON, if you move 10 VMs on a subnet over to AVS, they are still on the same Layer 2 subnet/VLAN, they are still using the on-prem GW.
-         - Schedule a maintenance for Customer A to move their VPN to PAN. At the same time enable MON just for those 10 VMs. Those 10 VMs are now routing with NSXT - all routing including VPN traffic and also Internet routed would go through the VNet. 
+         - Schedule a maintenance for Customer A to move their VPN to PAN. At the same time enable MON just for those 10 VMs. Those 10 VMs are now routing with the NSXT, so they would route all traffic (including VPN  and Internet traffic) would go through the VNet if we are letting 0/0 over ER.
+  - Layer 2 cutover is a zero change from a routing perspective.
+    - The VM moves over to AVS while routing stays the same. 
+  - Cutover of Layer 3 happens with MON on a per VM basis.
+  -    
     
 
 
