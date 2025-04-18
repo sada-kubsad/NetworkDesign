@@ -28,7 +28,7 @@
 </details>
 
 <details>
-<summary>POC</summary>
+<summary>Selection Criteria for End-State</summary>
 </details>
 
 <details>
