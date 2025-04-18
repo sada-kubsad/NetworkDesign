@@ -342,7 +342,7 @@
 ## Goal:
 - Prove that the connectivity works
 - 
-## Phase 1: Extend Layer 2 and move servers to AVS
+## Phase 1: Extend Layer 2, setup HCX and move servers to AVS
 ### Solution Description:
 - Use a development AVS environment in Austin
 - Setup VPN from on-prem to Azure (similating ER)
@@ -378,9 +378,10 @@
 3. Setup AVS environment
 4. Link AVS to ER GW created in Azure from step 2
 5. Setup ARS in Azure
-6. Move a test VM from Austin to AVS
+6. Setup HCX
+7. Move a test VM from Austin to AVS
 
-## Phase 2: Move VPN Tunnels, one at a time from on-prem to Azure
+## Phase 2: Layer 3 Cutover (Internet and VPN Tunnels), one at a time from on-prem to Azure
 ### Solution Description:
 - Build out the hub in Azure
 - Move the VPN Tunnels, one at a time from on-prem to Azure
