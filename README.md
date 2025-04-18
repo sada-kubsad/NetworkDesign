@@ -39,7 +39,7 @@
   - [Diagram](#)
   - [CutOver](#)
 
-- [Phase 2: Move VPN Tunnels, one at a time from on-prem to Azure](#phase-2-move-vpn-tunnels-one-at-a-time-from-on-prem-to-azure)
+- [Phase 2: Layer 3 Cutover (Internet and VPN Tunnels), one at a time from on-prem to Azure](#phase-2-layer-3-cutover-internet-and-vpn-tunnels-one-at-a-time-from-on-prem-to-azure)
   - [Solution Description](#)
   - [Diagram](#)
   - [Cutover](#)
@@ -112,15 +112,17 @@
   - Mobility Optimized Networking (MON) feature in HCX can spoof the default gateway from on-prem and put it in NSXT. So VMs that get migrated into AVS, even though on extended VLAN, we can essentially say the GW is local. So now the traffic does not have to hairpin all the way back to on-Prem. 
     -  Without MON:
        -  There is a default GW on-oprem. When we extend the VLAN, we are taking the default GW to AVS, but not connecting it to the Tier 1 router.
+       -  When you stretch the VLAN, on-prem GW is going to be sitting on the Tier 1 router in an admin down state. On-prem is advertising the entire subnet.  
     -  With MON:
        -  MON puts the default GW on the Tier 1. So now if a VM needs to talk to something, it doesn't have to hairpin back on-prem, it just goes straight out of NSX - it goes from Tier 1 to Tier 0 across ER.
+       - On-prem is normally advertise the entire subnet. But when MON is turned on, NSXT in going to advertise a /32 per VM to the on-prem.  
        - MON can influence routing per VM or per subnet. Per VM is the key. 
        - In the old school way, you can BGP peer with the VM itself.
        - MON is optimized for Layer 3 traffic
        - Using MON will require some policy routes to be created
        - With MON, if you move 10 VMs on a subnet over to AVS, they are still on the same Layer 2 subnet/VLAN, they are still using the on-prem GW.
          - Schedule a maintenance for Customer A to move their VPN to PAN. At the same time enable MON just for those 10 VMs. Those 10 VMs are now routing with the NSXT, so they would route all traffic (including VPN  and Internet traffic) would go through the VNet if we are letting 0/0 over ER.
-       - MON eliminates teh diea about needing multiple AV instance because you no longer need to do a big bang routing on the NSXTs per AVs instance. 
+       - MON eliminates the need for multiple AV instance because you no longer need to do a big bang routing on the NSXTs per AVs instance. 
 - Cutover Summary:
   - Layer 2 cutover is a zero change from a routing perspective.
     - The VM moves over to AVS while routing stays the same. 
@@ -379,25 +381,54 @@
 4. Link AVS to ER GW created in Azure from step 2
 5. Setup ARS in Azure
 6. Setup HCX
-7. Move a test VM from Austin to AVS
+7. Setup a test application: NGINX over port 80
+8. Move/VMotion a test VM from Austin to AVS
+
+### Exit Criteria:
+- VM is moved fron on-prem to AVS.
+- Application connectivity continues to work over Layer 2 extention after VM is migrated to AVS
+- Evaluate how Layer 2 stretch works
 
 ## Phase 2: Layer 3 Cutover (Internet and VPN Tunnels), one at a time from on-prem to Azure
 ### Solution Description:
 - Add Palos and ILB to the hub in Azure
-  - An NVA (like Palo) is required to inject routes (default route) into Azure.
-  - NVA --(routing info)--> ARS --> AVS, on-prem  
-- Move the VPN Tunnels, one at a time from on-prem to Azure
-- The VPN Tunnel will be to a different IP to the Palos in the Hub
-- The VMs in AVS, need to be able to talk to the VPN Tunnels and client instead of using the Global Reach to on-prem out to on-prem VPN.
-- There are 1000s of tunnels that will need to be moved one at a time.
-- After a customer's VPN tunnel cuts over from on-prem to Azure, they should have routes to get to AVS. And AVS should have a single route to get back to the customer's VPN tunnel.
+  - Required to:
+    - terminate VPNs
+    - Only an NVA (like Palo) can inject routes (default route) into Azure.
+    
+- Setup client VPN
+  - Client VPN to on-prem first to simulate existing environment
+    - NGINX on port 80 could be a test
+- Setup MON in HCX
+  - In preparation for cutover which happens during maintenance window.
+
+- Routing considerations:
+  - NVA --(routing info)--> ARS --> AVS, on-prem
+  - 
+- During a maintenance window: 
+  - Move the VPN Tunnels, one at a time from on-prem to Azure
+    - Customer changes their VPN peer IP to Azure 
+      - The VPN Tunnel will be to a different IP to the Palos in the Hub
+    - Make MON configuration changes to route internet and VPN traffic through Azure 
+    
+    
+    - - Can't have the same encryption domain in 2 separate VPNs.
+  - Internet connectivity
 
 ### Diagram:
 ![image](https://github.com/user-attachments/assets/e9047f19-f370-45b5-8fe0-944658134e02)
 
 ### Steps:
-1
+1. Setup Palos and ILB in Azure
+2. Setup a simulated client VPN to on-prem
+3. Declare a maintenance window
 - After a customer's VPN tunnel cuts over from on-prem to Azure, they should have routes to get to AVS.
+
+### Exit Criteria:
+- Validate VPN cut over successfully from on-prem to Azure/Palos
+- Verify application connectivity to port 80 on the VM in AVS  
+- After a customer's VPN tunnel cuts over from on-prem to Azure, they should have routes to get to AVS. And AVS should have a single route to get back to the customer's VPN tunnel.
+
 
 ## Phase 3: Move Default GW to AVS:
 ### Solution Description:
