@@ -373,12 +373,12 @@
 ![image](https://github.com/user-attachments/assets/bd25112c-f64b-4d66-981f-f2c0c4defa1b)
 
 ### Steps:
-- 1. Setup VPN from Austin/on-prem to Hub VNet in Azure
-  2. Setup ER GW in Azure Hub
-  3. Setup AVS environment
-  4. Link AVS to ER GW created in Azure from step 2
-  5. Setup ARS in Azure
-  6. Move a test VM from Austin to AVS
+1. Setup VPN from Austin/on-prem to Hub VNet in Azure
+2. Setup ER GW in Azure Hub
+3. Setup AVS environment
+4. Link AVS to ER GW created in Azure from step 2
+5. Setup ARS in Azure
+6. Move a test VM from Austin to AVS
 
 ## Phase 2: Move VPN Tunnels, one at a time from on-prem to Azure
 ### Solution Description:
