@@ -455,5 +455,5 @@
 - 
 
 # Next Steps:
-- Limits of number of AVS environments per region
-- Check on how many circuits can be linked with Global Reach for the multiple AVS environment design. 
+- In phase 2, are cutting over just VPN, not internet?
+- Build out phases 3 and 4.
