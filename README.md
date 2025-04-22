@@ -455,5 +455,5 @@
 - 
 
 # Next Steps:
-- In phase 2, are cutting over just VPN, not internet?
+- Currently In phase 2, are cutting over just VPN, not internet. Need confirmation (from Mays/Broadcom) that VPN and Internet cut over at different times. 
 - Build out phases 3 and 4.
