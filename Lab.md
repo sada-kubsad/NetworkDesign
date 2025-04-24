@@ -1,4 +1,4 @@
-```
+e```
 # Deploy and configure Azure VMware Solution
 
 # Register the Microsoft.AVS resource provider
